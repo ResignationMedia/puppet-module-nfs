@@ -12,8 +12,8 @@ module Puppet::Parser::Functions
             raise(TypeError, "create_exports_entry(): The first argument must be a string, but a #{directory.class} was given.")
         end
 
-        if not clients.is_a?(Array)
-            raise(TypeError, "create_exports_entry(): The second argument must be an array, but a #{clients.class} was given.")
+        if not clients.is_a?(Hash)
+            raise(TypeError, "create_exports_entry(): The second argument must be a hash, but a #{clients.class} was given.")
         end
 
         if not options.is_a?(String)
@@ -22,8 +22,8 @@ module Puppet::Parser::Functions
 
         exports_entry = "#{directory} "
 
-        clients.each do |client|
-            exports_entry += "#{client}(#{options}) "
+        clients.each do |k, client|
+            exports_entry += "#{client["ip"]}(#{options}) "
         end
 
         exports_entry += "\n"

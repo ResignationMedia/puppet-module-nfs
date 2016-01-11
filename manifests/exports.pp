@@ -10,23 +10,16 @@ define nfs::exports(
 
   $line = create_exports_entry($directory,$clients,$options)
 
-  notify { $line: }
+  file_line { $line:
+    ensure => $ensure,
+    line => $line,
+    path => '/etc/exports',
+    notify => Exec['exportfs']
+  }
 
-  if $ensure != 'absent' {
-    file { $directory:
-      ensure => directory,
-    }
-
-    #concat::fragment { $directory:
-    #  target => '/etc/exports',
-    #  content => $line,
-    #  require => File[$directory],
-    #}
-  } else {
-    augeas { '/etc/exports':
-      changes => [
-        "rm title[*]${line}",      
-      ],
-    }
+  exec { 'exportfs':
+    path => '/usr/sbin',
+    command => 'exportfs -ra',
+    refreshonly => true,
   }
 }
