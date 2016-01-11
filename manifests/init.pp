@@ -45,12 +45,10 @@ class nfs (
         }
         '6': {
           include ::rpcbind
-          include ::nfs::idmap
           $default_nfs_service = 'nfs'
         }
         '7': {
           include ::rpcbind
-          include ::nfs::idmap
           $default_nfs_service = undef
         }
         default: {
