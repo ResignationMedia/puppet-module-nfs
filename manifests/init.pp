@@ -41,13 +41,16 @@ class nfs (
 
       case $::operatingsystemmajrelease {
         '5': {
+          include nfs::idmap
           $default_nfs_service = 'nfs'
         }
         '6': {
           include ::rpcbind
+          include nfs::idmap
           $default_nfs_service = 'nfs'
         }
         '7': {
+          include nfs::idmap
           include ::rpcbind
           $default_nfs_service = undef
         }
