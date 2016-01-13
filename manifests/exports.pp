@@ -14,10 +14,10 @@ define nfs::exports(
     ensure => $ensure,
     line => $line,
     path => '/etc/exports',
-    notify => Exec['exportfs']
+    notify => Exec["exportfs_${directory}"]
   }
 
-  exec { 'exportfs':
+  exec { "exportfs_${directory}":
     path => '/usr/sbin',
     command => 'exportfs -ra',
     refreshonly => true,

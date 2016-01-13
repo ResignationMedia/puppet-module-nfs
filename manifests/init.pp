@@ -120,6 +120,10 @@ class nfs (
     ensure => present,
   }
 
+  kmod::load { 'nfs4':
+    require => Package[$nfs_package_real],
+  }
+
   if $nfs_service_real {
     service { 'nfs_service':
       ensure    => running,
