@@ -120,7 +120,7 @@ class nfs (
     ensure => present,
   }
 
-  kmod::load { 'nfs4':
+  kmod::load { 'nfs':
     require => Package[$nfs_package_real],
   }
 
