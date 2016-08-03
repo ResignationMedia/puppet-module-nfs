@@ -23,7 +23,6 @@ class nfs::idmap (
   $verbosity                 = '0',
   $pipefs_directory          = 'USE_DEFAULTS',
 ) {
-
   $is_idmap_domain_valid = is_domain_name($idmap_domain)
   if $is_idmap_domain_valid != true {
     fail("nfs::idmap::idmap_domain parameter, <${idmap_domain}>, is not a valid name.")
@@ -90,7 +89,7 @@ class nfs::idmap (
           $default_idmap_package = 'nfs-utils-lib'
         }
         '7': {
-          $default_idmap_service = 'nfs-idmap'
+          $default_idmap_service = 'nfs-idmapd'
           $default_idmap_package = 'libnfsidmap'
         }
         default: {
