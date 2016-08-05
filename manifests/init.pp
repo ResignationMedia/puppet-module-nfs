@@ -118,6 +118,7 @@ class nfs (
 
   package { $nfs_package_real:
     ensure => present,
+    before => Class['Nfs::Idmap'],
   }
 
   kmod::load { 'nfs':
