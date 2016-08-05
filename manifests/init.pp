@@ -143,6 +143,10 @@ class nfs (
     }
 
     validate_hash($mounts_real)
-    create_resources('types::mount',$mounts_real)
+
+    $mounts_options = {
+      require => Package[$nfs_package_real],
+    }
+    create_resources('types::mount',$mounts_real, $mounts_options)
   }
 }
