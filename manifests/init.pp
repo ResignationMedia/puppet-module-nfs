@@ -3,10 +3,12 @@
 # Manages NFS
 #
 class nfs (
-  $hiera_hash  = false,
-  $nfs_package = 'USE_DEFAULTS',
-  $nfs_service = 'USE_DEFAULTS',
-  $mounts      = undef,
+  $hiera_hash               = false,
+  $nfs_package              = 'USE_DEFAULTS',
+  $nfs_service              = 'USE_DEFAULTS',
+  $install_package          = true,
+  $mounts                   = undef,
+  $exports                  = undef,
 ) {
 
   if type3x($hiera_hash) == 'string' {
@@ -116,9 +118,11 @@ class nfs (
     $nfs_service_real = $nfs_service
   }
 
-  package { $nfs_package_real:
-    ensure => present,
-    before => Class['Nfs::Idmap'],
+  if $install_package {
+    package { $nfs_package_real:
+      ensure => present,
+      before => Class['Nfs::Idmap'],
+    }
   }
 
   kmod::load { 'nfs':
@@ -149,5 +153,20 @@ class nfs (
       require => Package[$nfs_package_real],
     }
     create_resources('types::mount',$mounts_real, $mounts_options)
+  }
+
+  if $exports != undef {
+    if $hiera_hash_real == true {
+      $exports_real = hiera_hash('nfs::exports')
+    } else {
+      $exports_real = $exports
+      notice('Future versions of the nfs module will default nfs::hiera_hash to true')
+    }
+
+    $exports_options = {
+      require => Service[$nfs_service_real],
+    }
+
+    create_resources(nfs::exports, $exports_real, $exports_options)
   }
 }
